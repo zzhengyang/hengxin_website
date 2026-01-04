@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>双鑫自动化 - 首页</title>
+    <meta name="description" content="莱州市双鑫自动化设备有限公司官网（静态演示版）" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page" id="page">
+      <div data-component="header"></div>
+
+      <main class="hero" id="hero" aria-label="首页主视觉">
+        <div class="hero__shade" aria-hidden="true"></div>
+        <section class="hero__content hero__content--premium" aria-label="主视觉文案">
+          <div class="hero-copy" aria-hidden="true">
+            <img class="hero-copy__img hero-copy__img--primary" src="./assets/hero/copy-1.png.webp" alt="" />
+            <img class="hero-copy__img hero-copy__img--en" src="./assets/hero/copy-2.png.webp" alt="" />
+            <img class="hero-copy__img hero-copy__img--sub" src="./assets/hero/copy-3.png.webp" alt="" />
+          </div>
+          <div class="sr-only">
+            莱州市双鑫自动化设备有限公司
+            批发基地　研发中心
+            SHUANGXIN MACHINE
+            比速度！比精度！比耐用度！比您的满意度！双鑫制造
+            24小时服务热线：130-0160-4406
+          </div>
+        </section>
+
+        <section class="entry" aria-label="部门入口">
+          <a class="entry__card" href="./dept-food.html">
+            <span class="entry__icon" aria-hidden="true">
+              <img class="entry__iconImg" src="./assets/icons/entry-1.png.webp" alt="" />
+            </span>
+            <span class="entry__meta">
+              <span class="entry__title">食品分选机事业部</span>
+              <span class="entry__more">点击进入 &gt;&gt;</span>
+            </span>
+          </a>
+
+          <a class="entry__card" href="./dept-powder.html">
+            <span class="entry__icon" aria-hidden="true">
+              <img class="entry__iconImg" src="./assets/icons/entry-2.png.webp" alt="" />
+            </span>
+            <span class="entry__meta">
+              <span class="entry__title">粉体输送事业部</span>
+              <span class="entry__more">点击进入 &gt;&gt;</span>
+            </span>
+          </a>
+
+          <a class="entry__card" href="./dept-environment.html">
+            <span class="entry__icon" aria-hidden="true">
+              <img class="entry__iconImg" src="./assets/icons/entry-3.png.webp" alt="" />
+            </span>
+            <span class="entry__meta">
+              <span class="entry__title">环保事业部</span>
+              <span class="entry__more">点击进入 &gt;&gt;</span>
+            </span>
+          </a>
+        </section>
+
+        <section class="carousel" aria-label="背景走马灯">
+          <div class="carousel__hint">左右滑动或拖拽切换背景</div>
+          <div class="carousel__track" id="carouselTrack" role="listbox" aria-label="背景缩略图列表" tabindex="0">
+            <button class="carousel__item is-active" type="button" role="option" aria-selected="true" data-slide="0" aria-label="背景 1"></button>
+            <button class="carousel__item" type="button" role="option" aria-selected="false" data-slide="1" aria-label="背景 2"></button>
+            <button class="carousel__item" type="button" role="option" aria-selected="false" data-slide="2" aria-label="背景 3"></button>
+            <button class="carousel__item" type="button" role="option" aria-selected="false" data-slide="3" aria-label="背景 4"></button>
+          </div>
+        </section>
+      </main>
+
+      <div data-component="footer"></div>
+    </div>
+
+    <script src="./main.js" defer></script>
+  </body>
+</html>
+
+

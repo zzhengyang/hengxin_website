@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>产品详情</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div data-component="header"></div>
+
+      <main class="subpage">
+        <section class="sub-hero sub-hero--imageOnly" style="--sub-hero: url('./assets/banner/dept-food.jpg.webp'); --sub-hero-ratio: 1920 / 420;"></section>
+
+        <nav class="breadcrumb" aria-label="目录">
+          <div class="breadcrumb__inner">
+            <span>当前位置：</span>
+            <a href="./index.html">首页</a>
+            <span>&gt;</span>
+            <a href="./product-center.html">产品中心</a>
+            <span>&gt;</span>
+            <span id="productCrumb">产品详情</span>
+          </div>
+        </nav>
+
+        <section class="sub-content">
+          <div class="sub-content__panel product-detail" id="productDetailApp" aria-live="polite">
+            <div class="product-detail__grid">
+              <div class="product-media">
+                <div class="product-media__dots" id="productDots" aria-label="图片切换"></div>
+                <div class="product-media__frame">
+                  <img class="product-media__img" id="productMainImg" alt="" />
+                </div>
+              </div>
+
+              <div class="product-info">
+                <div class="product-info__head">
+                  <h1 class="product-info__title" id="productTitle">加载中…</h1>
+                  <a class="product-info__share" id="productShare" href="javascript:void(0)" aria-label="打开产品详情链接">↗</a>
+                </div>
+
+                <div class="product-info__table">
+                  <div class="product-info__row">
+                    <div class="product-info__k">品牌</div>
+                    <div class="product-info__v" id="productBrand"></div>
+                  </div>
+                  <div class="product-info__row">
+                    <div class="product-info__k">联系人</div>
+                    <div class="product-info__v" id="productContact"></div>
+                  </div>
+                  <div class="product-info__row">
+                    <div class="product-info__k">电话</div>
+                    <div class="product-info__v" id="productPhone"></div>
+                  </div>
+                  <div class="product-info__row">
+                    <div class="product-info__k">地址</div>
+                    <div class="product-info__v" id="productAddress"></div>
+                  </div>
+                </div>
+
+                <div class="product-info__actions">
+                  <a class="product-btn product-btn--primary" id="productCallBtn" href="tel:130-0160-4406">电话咨询</a>
+                  <a class="product-btn" id="productBookBtn" href="./contact.html">立即预约</a>
+                </div>
+
+                <div class="product-info__desc" id="productDesc"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div data-component="footer"></div>
+    </div>
+    <script src="./main.js" defer></script>
+  </body>
+</html>
+
+

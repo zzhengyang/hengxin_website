@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>联系我们</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div data-component="header"></div>
+
+      <main class="subpage">
+        <section class="sub-hero sub-hero--imageOnly" style="--sub-hero: url('./assets/banner/contact.png.webp'); --sub-hero-ratio: 1920 / 400;"></section>
+
+        <nav class="breadcrumb" aria-label="目录">
+          <div class="breadcrumb__inner">
+            <span>当前位置：</span>
+            <a href="./index.html">首页</a>
+            <span>&gt;</span>
+            <span>联系我们</span>
+          </div>
+        </nav>
+
+        <section class="contact-page">
+          <div class="contact-page__inner">
+            <h2 class="contact-page__h2">期待您与我们取得联系</h2>
+            <div class="contact-page__divider" aria-hidden="true"></div>
+
+            <div class="contact-top">
+              <div class="contact-cards" aria-label="联系信息">
+                <div class="info-card">
+                  <div class="info-card__icon" aria-hidden="true">
+                    <img class="info-card__iconImg" src="./assets/icons/contact-person.png.webp" alt="" />
+                  </div>
+                  <div class="info-card__meta">
+                    <div class="info-card__label">联系人</div>
+                    <div class="info-card__value">吕总</div>
+                  </div>
+                </div>
+                <div class="info-card">
+                  <div class="info-card__icon" aria-hidden="true">
+                    <img class="info-card__iconImg" src="./assets/icons/contact-phone.png.webp" alt="" />
+                  </div>
+                  <div class="info-card__meta">
+                    <div class="info-card__label">联系方式</div>
+                    <div class="info-card__value"><a href="tel:13001604406">130-0160-4406</a></div>
+                  </div>
+                </div>
+                <div class="info-card">
+                  <div class="info-card__icon" aria-hidden="true">
+                    <img class="info-card__iconImg" src="./assets/icons/contact-mail.png.webp" alt="" />
+                  </div>
+                  <div class="info-card__meta">
+                    <div class="info-card__label">邮箱</div>
+                    <div class="info-card__value"><a href="mailto:info@example.com">2362881610@qq.com</a></div>
+                  </div>
+                </div>
+                <div class="info-card">
+                  <div class="info-card__icon" aria-hidden="true">
+                    <img class="info-card__iconImg" src="./assets/icons/contact-pin.png.webp" alt="" />
+                  </div>
+                  <div class="info-card__meta">
+                    <div class="info-card__label">地址</div>
+                    <div class="info-card__value">山东省莱州市城港路街道开元路</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="map-block" aria-label="地图">
+              <div id="baiduMap" class="baidu-map" role="application" aria-label="百度地图"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="support-section" aria-label="服务与支持">
+          <div class="support-section__inner">
+            <h2 class="support-section__h2">服务与支持</h2>
+            <div class="support-section__divider" aria-hidden="true"></div>
+            <div class="support-grid">
+              <div class="support-card">
+                <h3 class="support-card__h3">售前服务承诺</h3>
+                <ul class="support-card__list">
+                  <li>提供专业咨询︰我们保证在24小时之内回答您所提出的任何专业技术问题</li>
+                  <li>提供详细资料∶我们保证在24小时之内将您所需要的技术资料发给您;</li>
+                  <li>提供合理报价︰我们保证对您所要求的产品进行合理报价;</li>
+                  <li>提供考察接待︰我们保证随时接待您的考察，并为您提供各种便利条件。</li>
+                </ul>
+              </div>
+              <div class="support-card">
+                <h3 class="support-card__h3">售中服务承诺</h3>
+                <ul class="support-card__list">
+                  <li>我们将认真、公正、严谨、诚信地对待每一份合同;</li>
+                  <li>我们保证守时、保质、保量地严格执行合同规定的各项条款;</li>
+                  <li>我们保证按合同的规定为您提供生产、安装、调试、培训等各项服务。</li>
+                </ul>
+              </div>
+              <div class="support-card">
+                <h3 class="support-card__h3">售后服务承诺</h3>
+                <ul class="support-card__list">
+                  <li>如果您的设备需要维修，或有技术方面问题的咨询，请您直接拨打客服电话0535-2535377与我公司售后服务部联系；</li>
+                  <li>健全的客户档案︰客户设备档案齐全，随时跟踪客户使用状况，提供完善的服务；</li>
+                  <li>定期提供完善的维护方案，确保您无后顾之忧。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="factory-section" aria-label="工厂展示">
+          <div class="factory-section__inner">
+            <img class="factory-fullImg" src="./assets/factory/our-factory.jpg.webp" alt="" />
+          </div>
+        </section>
+      </main>
+
+      <div data-component="footer"></div>
+    </div>
+    <script src="./main.js" defer></script>
+    <script src="https://api.map.baidu.com/api?v=3.0&ak=8OB78VSlrEmztqzqLrl35SSNTFCpNiq7"></script>
+    <script>
+      (function () {
+        function init() {
+          if (!window.BMap || !document.getElementById("baiduMap")) return;
+          var lng = 119.964241;
+          var lat = 37.223684;
+          var map = new BMap.Map("baiduMap");
+          var point = new BMap.Point(lng, lat);
+          map.centerAndZoom(point, 17);
+          map.enableScrollWheelZoom(true);
+          map.addControl(new BMap.NavigationControl());
+          map.addControl(new BMap.ScaleControl());
+          var marker = new BMap.Marker(point);
+          map.addOverlay(marker);
+
+          // Tooltip 标签（常驻显示）——BMap.Label 采用 HTML 渲染，\n 不会换行，需使用 <br/>
+          var labelHtml =
+            '<div style="font-weight:900;">莱州市双鑫自动化设备有限公司</div>' +
+            '<div style="margin-top:2px;">地址：山东省莱州市城港路街道开元路</div>';
+          var label = new BMap.Label(labelHtml, {
+            position: point,
+            offset: new BMap.Size(18, -32),
+          });
+          label.setStyle({
+            color: "#0e1a2a",
+            fontSize: "12px",
+            backgroundColor: "rgba(255,255,255,.92)",
+            border: "1px solid rgba(15,23,42,.18)",
+            borderRadius: "8px",
+            padding: "6px 10px",
+            boxShadow: "0 10px 24px rgba(0,0,0,.14)",
+            whiteSpace: "nowrap",
+          });
+          marker.setLabel(label);
+
+          // 点击弹出信息窗（可按需改文案）
+          var infoHtml =
+            '<div style="font-size:13px;line-height:1.7;">' +
+            "<div style=\"font-weight:900;margin-bottom:4px;\">莱州市双鑫自动化设备有限公司</div>" +
+            "<div>地址：山东省莱州市城港路街道开元路</div>" +
+            "<div>坐标：" +
+            lng +
+            "," +
+            lat +
+            "</div>" +
+            "</div>";
+          var info = new BMap.InfoWindow(infoHtml, { width: 260, title: "" });
+          marker.addEventListener("click", function () {
+            map.openInfoWindow(info, point);
+          });
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", init);
+        } else {
+          init();
+        }
+      })();
+    </script>
+  </body>
+</html>
+
+

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>新闻中心</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div data-component="header"></div>
+
+      <main class="subpage">
+        <section class="sub-hero sub-hero--imageOnly" style="--sub-hero: url('./assets/banner/news.png.webp'); --sub-hero-ratio: 1920 / 400;"></section>
+
+        <nav class="breadcrumb" aria-label="目录">
+          <div class="breadcrumb__inner">
+            <span>当前位置：</span>
+            <a href="./index.html">首页</a>
+            <span>&gt;</span>
+            <span>新闻中心</span>
+          </div>
+        </nav>
+
+        <section class="sub-content">
+          <h2 class="sub-content__title">新闻资讯</h2>
+          <div class="sub-content__divider" aria-hidden="true"></div>
+          <div class="sub-content__panel news" id="newsApp">
+            <div class="news__list" id="newsList" aria-live="polite">
+              <div class="news__empty">加载中…</div>
+            </div>
+            <div class="news__pager" id="newsPager" aria-label="分页"></div>
+          </div>
+        </section>
+      </main>
+
+      <div data-component="footer"></div>
+    </div>
+    <script src="./main.js" defer></script>
+  </body>
+</html>
+
+

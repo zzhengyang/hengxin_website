@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>运维 - 文章管理</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div data-component="header"></div>
+
+      <main class="subpage">
+        <section class="sub-hero sub-hero--imageOnly" style="--sub-hero: url('./assets/banner/news.png.webp'); --sub-hero-ratio: 1920 / 320;"></section>
+
+        <nav class="breadcrumb" aria-label="目录">
+          <div class="breadcrumb__inner">
+            <span>当前位置：</span>
+            <a href="./index.html">首页</a>
+            <span>&gt;</span>
+            <span>运维管理</span>
+          </div>
+        </nav>
+
+        <section class="sub-content">
+          <h2 class="sub-content__title">文章管理</h2>
+          <div class="sub-content__divider" aria-hidden="true"></div>
+
+          <div class="sub-content__panel ops" id="opsApp" aria-live="polite">
+            <header class="ops__bar">
+              <div class="ops__left">
+                <div class="ops__hint">
+                  纯静态页面无法直接写入服务器文件。请使用“导出 new.json”下载后，把文件放回项目中使用。
+                </div>
+              </div>
+              <div class="ops__right">
+                <button class="ops-btn ops-btn--ghost" type="button" id="opsImportBtn">导入 JSON</button>
+                <button class="ops-btn ops-btn--ghost" type="button" id="opsReloadBtn">重新加载</button>
+                <button class="ops-btn ops-btn--primary" type="button" id="opsAddBtn">添加文章</button>
+                <button class="ops-btn ops-btn--primary" type="button" id="opsExportBtn">导出 new.json</button>
+                <button class="ops-btn" type="button" id="opsSaveFileBtn">保存到 new.json</button>
+                <input id="opsFileInput" class="ops__file" type="file" accept="application/json" />
+              </div>
+            </header>
+
+            <div class="ops__grid">
+              <section class="ops__list">
+                <div class="ops__tools">
+                  <input class="ops__search" id="opsSearch" placeholder="搜索标题/类型…" />
+                  <span class="ops__count" id="opsCount"></span>
+                </div>
+                <div class="ops__items" id="opsItems">
+                  <div class="news__empty">加载中…</div>
+                </div>
+              </section>
+
+              <section class="ops__editor" aria-label="编辑器">
+                <div class="ops-editor__header">
+                  <div class="ops-editor__title" id="opsEditorTitle">选择一篇文章进行编辑</div>
+                  <div class="ops-editor__actions">
+                    <button class="ops-btn ops-btn--ghost" type="button" id="opsDuplicateBtn" disabled>复制</button>
+                    <button class="ops-btn ops-btn--danger" type="button" id="opsDeleteBtn" disabled>删除</button>
+                  </div>
+                </div>
+
+                <form class="ops-form" id="opsForm">
+                  <div class="ops-form__row">
+                    <label class="ops-form__label">标题</label>
+                    <input class="ops-form__input" id="opsTitle" required />
+                  </div>
+                  <div class="ops-form__row">
+                    <label class="ops-form__label">文章类型</label>
+                    <input class="ops-form__input" id="opsCategory" placeholder="例如：行业资讯 / 公司动态" required />
+                  </div>
+                  <div class="ops-form__row">
+                    <label class="ops-form__label">发布时间</label>
+                    <input class="ops-form__input" id="opsDate" placeholder="YYYY-MM-DD" />
+                  </div>
+                  <div class="ops-form__row">
+                    <label class="ops-form__label">文章内容（富文本）</label>
+                    <div class="ops-rte">
+                      <div class="ops-rte__toolbar" id="opsRteToolbar" role="toolbar" aria-label="富文本工具栏">
+                        <button class="ops-rte__btn" type="button" data-cmd="bold"><strong>B</strong></button>
+                        <button class="ops-rte__btn" type="button" data-cmd="italic"><em>I</em></button>
+                        <button class="ops-rte__btn" type="button" data-cmd="underline"><span style="text-decoration: underline;">U</span></button>
+                        <span class="ops-rte__sep" aria-hidden="true"></span>
+                        <button class="ops-rte__btn" type="button" data-cmd="formatBlock" data-value="p">正文</button>
+                        <button class="ops-rte__btn" type="button" data-cmd="formatBlock" data-value="h2">标题</button>
+                        <button class="ops-rte__btn" type="button" data-cmd="formatBlock" data-value="blockquote">引用</button>
+                        <span class="ops-rte__sep" aria-hidden="true"></span>
+                        <button class="ops-rte__btn" type="button" data-cmd="insertUnorderedList">• 列表</button>
+                        <button class="ops-rte__btn" type="button" data-cmd="insertOrderedList">1. 列表</button>
+                        <span class="ops-rte__sep" aria-hidden="true"></span>
+                        <button class="ops-rte__btn" type="button" data-action="link">链接</button>
+                        <button class="ops-rte__btn" type="button" data-action="image">图片</button>
+                        <span class="ops-rte__sep" aria-hidden="true"></span>
+                        <button class="ops-rte__btn" type="button" data-cmd="removeFormat">清除格式</button>
+                        <button class="ops-rte__btn ops-rte__btn--right" type="button" id="opsToggleSourceBtn">源码</button>
+                      </div>
+                      <div class="ops-rte__editor" id="opsRte" contenteditable="true" role="textbox" aria-multiline="true"></div>
+                      <textarea class="ops-form__textarea ops-form__textarea--source" id="opsContentSource" rows="12" hidden></textarea>
+                    </div>
+                  </div>
+
+                  <div class="ops-form__footer">
+                    <div class="ops-form__meta" id="opsMeta"></div>
+                    <div class="ops-form__buttons">
+                      <button class="ops-btn ops-btn--ghost" type="button" id="opsPreviewBtn">预览</button>
+                      <button class="ops-btn ops-btn--primary" type="submit" id="opsSaveBtn">保存到内存</button>
+                    </div>
+                  </div>
+                </form>
+
+                <div class="ops-preview" id="opsPreview" hidden>
+                  <div class="ops-preview__header">
+                    <div class="ops-preview__title">预览</div>
+                    <button class="ops-btn ops-btn--ghost" type="button" id="opsClosePreviewBtn">关闭</button>
+                  </div>
+                  <div class="ops-preview__body" id="opsPreviewBody"></div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div data-component="footer"></div>
+    </div>
+    <script src="./main.js" defer></script>
+  </body>
+</html>
+
+

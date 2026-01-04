@@ -1,0 +1,88 @@
+{
+  "categories": [
+    { "id": "seafood", "label": "海鲜类分选机", "scope": "food" },
+    { "id": "poultry", "label": "禽肉类分选机", "scope": "food" },
+    { "id": "egg", "label": "蛋黄类分选机", "scope": "food" },
+    { "id": "fruitveg", "label": "果蔬类分选机", "scope": "food" },
+    { "id": "tcm", "label": "中药分选机", "scope": "food" },
+    { "id": "parts", "label": "分选机配件", "scope": "food" },
+    { "id": "bubble", "label": "气泡清洗机", "scope": "food" },
+    { "id": "new", "label": "分选机（上新）", "scope": "food" },
+
+    { "id": "pipechain", "label": "管链输送机", "scope": "environment" }
+  ],
+  "defaults": {
+    "brand": "莱州市双鑫自动化设备有限公司",
+    "contact": "吕总",
+    "phone": "130-0160-4406",
+    "address": "山东省莱州市城港路街道开元路"
+  },
+  "products": [
+    {
+      "id": "abalone-sorter",
+      "title": "鲍鱼分选机",
+      "categoryId": "seafood",
+      "cover": "./assets/bg/home-1.jpg.webp",
+      "images": ["./assets/bg/home-1.jpg.webp", "./assets/bg/home-2.jpg.webp", "./assets/bg/home-3.jpg.webp"],
+      "summary": "适用于海产品重量分级与自动分选。"
+    },
+    {
+      "id": "shrimp-sorter",
+      "title": "对虾分选机",
+      "categoryId": "seafood",
+      "cover": "./assets/bg/home-2.jpg.webp",
+      "images": ["./assets/bg/home-2.jpg.webp", "./assets/bg/home-4.jpg.webp"],
+      "summary": "分选速度快，参数设置便捷，适用于对虾分级。"
+    },
+    {
+      "id": "sea-cucumber-sorter",
+      "title": "海参分选机",
+      "categoryId": "seafood",
+      "cover": "./assets/bg/home-3.jpg.webp",
+      "images": ["./assets/bg/home-3.jpg.webp", "./assets/bg/home-1.jpg.webp"],
+      "summary": "适用于海参的重量分选、分级与自动输送。"
+    },
+    {
+      "id": "seafood-steamer",
+      "title": "海参蒸煮箱",
+      "categoryId": "seafood",
+      "cover": "./assets/bg/home-4.jpg.webp",
+      "images": ["./assets/bg/home-4.jpg.webp"],
+      "summary": "用于海参等海产品蒸煮加工，便于清洁维护。"
+    },
+    {
+      "id": "poultry-sorter",
+      "title": "禽肉类分选机",
+      "categoryId": "poultry",
+      "cover": "./assets/food/pic-1.jpg.webp",
+      "images": ["./assets/food/pic-1.jpg.webp", "./assets/food/pic-2.jpg.webp"],
+      "summary": "适用于禽肉类按重量自动分级分选。"
+    },
+    {
+      "id": "fruit-veg-sorter",
+      "title": "果蔬类分选机",
+      "categoryId": "fruitveg",
+      "cover": "./assets/food/pic-2.jpg.webp",
+      "images": ["./assets/food/pic-2.jpg.webp", "./assets/food/pic-3.jpg.webp"],
+      "summary": "适用于果蔬产品重量分级与分选。"
+    },
+    {
+      "id": "bubble-washer",
+      "title": "气泡清洗机",
+      "categoryId": "bubble",
+      "cover": "./assets/food/pic-3.jpg.webp",
+      "images": ["./assets/food/pic-3.jpg.webp"],
+      "summary": "利用气泡翻滚对物料进行清洗，干净卫生。"
+    },
+    {
+      "id": "pipe-chain-conveyor",
+      "title": "管链输送机",
+      "categoryId": "pipechain",
+      "cover": "./assets/powder/feature-1.jpg.webp",
+      "images": ["./assets/powder/feature-1.jpg.webp", "./assets/powder/feature-2.jpg.webp", "./assets/powder/feature-3.jpg.webp"],
+      "summary": "适用于粉体/颗粒物料输送，满足倾斜、转弯、垂直等工况。"
+    }
+  ]
+}
+
+

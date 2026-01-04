@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>环保事业部</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div data-component="header"></div>
+
+      <main class="subpage">
+        <section class="sub-hero sub-hero--imageOnly" style="--sub-hero: url('./assets/banner/dept-environment.jpg.webp'); --sub-hero-ratio: 1920 / 550;"></section>
+
+        <nav class="breadcrumb" aria-label="目录">
+          <div class="breadcrumb__inner">
+            <span>当前位置：</span>
+            <a href="./index.html">首页</a>
+            <span>&gt;</span>
+            <span>环保事业部</span>
+          </div>
+        </nav>
+
+        <!-- 产品中心：计划做通用组件，这里先预留占位 -->
+        <section class="env-product-center" aria-label="产品中心">
+          <div class="env-product-center__inner">
+            <h2 class="section-center__title">产品中心</h2>
+            <div class="section-center__divider" aria-hidden="true"></div>
+            <div data-component="product-center" data-scope="environment"></div>
+          </div>
+        </section>
+
+        <section class="env-features" aria-label="管链机的特点">
+          <div class="env-features__inner">
+            <h2 class="section-center__title">管链机的特点</h2>
+            <div class="section-center__divider" aria-hidden="true"></div>
+
+            <div class="env-icon-grid">
+              <div class="env-icon-card">
+                <img class="env-icon-card__img" src="./assets/environment/icon-1.png.webp" alt="" />
+                <div class="env-icon-card__title">节能高效</div>
+              </div>
+              <div class="env-icon-card">
+                <img class="env-icon-card__img" src="./assets/environment/icon-2.png.webp" alt="" />
+                <div class="env-icon-card__title">自动控制</div>
+              </div>
+              <div class="env-icon-card">
+                <img class="env-icon-card__img" src="./assets/environment/icon-3.png.webp" alt="" />
+                <div class="env-icon-card__title">完善的自动保护功能</div>
+              </div>
+              <div class="env-icon-card">
+                <img class="env-icon-card__img" src="./assets/environment/icon-4.png.webp" alt="" />
+                <div class="env-icon-card__title">结构牢固 经久耐用</div>
+              </div>
+              <div class="env-icon-card">
+                <img class="env-icon-card__img" src="./assets/environment/icon-5.png.webp" alt="" />
+                <div class="env-icon-card__title">提高质量 降低成本</div>
+              </div>
+              <div class="env-icon-card">
+                <img class="env-icon-card__img" src="./assets/environment/icon-6.png.webp" alt="" />
+                <div class="env-icon-card__title">环保效果明显</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="env-principle" aria-label="陶瓷真空过滤机工作原理">
+          <div class="env-principle__inner">
+            <h2 class="env-principle__title">陶瓷真空过滤机工作原理</h2>
+            <div class="env-principle__sub">清洁环保 · 节能高效 · 物料搬运 · 反复利用</div>
+          </div>
+
+          <!-- 按需求：工作原理为“文案-图片-文案-图片”夹杂布局 -->
+          <div class="env-principle__mix" aria-label="工作原理">
+            <div class="env-principle__copy">
+              全自动陶瓷真空过滤机主要包括渣桶、陶瓷摩擦盘、搅拌器、刮刀、浆料槽和陶瓷 过滤板，在真空的作用下，陶瓷板表面形成一层较厚的颗粒堆积滤层，滤液通过陶瓷板 过滤经陶瓷摩擦盘至真空罐后排出，滤饼干燥后，在卸料区时被刮刀刮下至集料箱，完成作业。
+            </div>
+            <img class="env-principle__img" src="./assets/environment/principle-1.png.webp" alt="" />
+            <div class="env-principle__copy">
+              全自动陶瓷真空过滤机主要包括渣桶、陶瓷摩擦盘、搅拌器、刮刀、浆料槽和陶瓷 过滤板，在真空的作用下，陶瓷板表面形成一层较厚的颗粒堆积滤层，滤液通过陶瓷板 过滤经陶瓷摩擦盘至真空罐后排出，滤饼干燥后，在卸料区时被刮刀刮下至集料箱，完成作业。
+            </div>
+            <img class="env-principle__img" src="./assets/environment/principle-2.png.webp" alt="" />
+          </div>
+        </section>
+
+        <section class="env-gallery" aria-label="环保产品图片展示">
+          <div class="env-gallery__inner">
+            <h2 class="section-center__title">管链机</h2>
+            <div class="section-center__divider" aria-hidden="true"></div>
+
+            <div class="env-masonry" aria-label="图片拼贴">
+              <img class="env-masonry__img env-masonry__a" src="./assets/environment/feat-2.png.webp" alt="" />
+              <img class="env-masonry__img env-masonry__b" src="./assets/environment/feat-3.png.webp" alt="" />
+              <img class="env-masonry__img env-masonry__c" src="./assets/environment/feat-4.png.webp" alt="" />
+              <img class="env-masonry__img env-masonry__d" src="./assets/environment/feat-5.png.webp" alt="" />
+              <img class="env-masonry__img env-masonry__e" src="./assets/environment/feat-1.png.webp" alt="" />
+              <img class="env-masonry__img env-masonry__f" src="./assets/environment/feat-6.png.webp" alt="" />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div data-component="footer"></div>
+    </div>
+    <script src="./main.js" defer></script>
+  </body>
+</html>
+
+

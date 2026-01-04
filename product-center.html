@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>产品中心</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div data-component="header"></div>
+
+      <main class="subpage">
+        <section class="sub-hero sub-hero--imageOnly" style="--sub-hero: url('./assets/banner/dept-food.jpg.webp'); --sub-hero-ratio: 1920 / 420;"></section>
+
+        <nav class="breadcrumb" aria-label="目录">
+          <div class="breadcrumb__inner">
+            <span>当前位置：</span>
+            <a href="./index.html">首页</a>
+            <span>&gt;</span>
+            <span>产品中心</span>
+          </div>
+        </nav>
+
+        <section class="sub-content">
+          <h2 class="section-center__title">产品中心</h2>
+          <div class="section-center__divider" aria-hidden="true"></div>
+
+          <div class="sub-content__panel">
+            <div data-component="product-center" data-scope="food"></div>
+          </div>
+        </section>
+      </main>
+
+      <div data-component="footer"></div>
+    </div>
+    <script src="./main.js" defer></script>
+  </body>
+</html>
+
+
