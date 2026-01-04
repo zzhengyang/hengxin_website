@@ -3,7 +3,10 @@
     const headerHost = document.querySelector('[data-component="header"]');
     const footerHost = document.querySelector('[data-component="footer"]');
 
-    const path = (window.location && window.location.pathname) ? window.location.pathname.split("/").pop() : "";
+    const path =
+      window.location && window.location.pathname
+        ? window.location.pathname.split("/").pop()
+        : "";
     const current = path || "index.html";
 
     const navItems = [
@@ -14,7 +17,11 @@
       { href: "./about.html", label: "关于双鑫" },
       { href: "./news.html", label: "新闻中心" },
       { href: "./contact.html", label: "联系我们" },
-      { href: "https://lzsxzdh.1688.com/?spm=0.0.wp_pc_common_topnav_38229151.0", label: "阿里巴巴", external: true },
+      {
+        href: "https://lzsxzdh.1688.com/?spm=0.0.wp_pc_common_topnav_38229151.0",
+        label: "阿里巴巴",
+        external: true,
+      },
     ];
 
     if (headerHost) {
@@ -28,15 +35,21 @@
           <nav class="nav">
             ${navItems
               .map((i) => {
-                const isExternal = Boolean(i.external) || /^https?:\/\//.test(i.href);
+                const isExternal =
+                  Boolean(i.external) || /^https?:\/\//.test(i.href);
                 const hrefKey = i.href.replace("./", "");
                 const isActive =
                   !isExternal &&
                   (hrefKey === current ||
-                    (current === "news-detail.html" && hrefKey === "news.html"));
-                const extra = isExternal ? ' target="_blank" rel="noopener noreferrer"' : "";
+                    (current === "news-detail.html" &&
+                      hrefKey === "news.html"));
+                const extra = isExternal
+                  ? ' target="_blank" rel="noopener noreferrer"'
+                  : "";
                 const aria = isActive ? ' aria-current="page"' : "";
-                return `<a class="nav__link ${isActive ? "is-active" : ""}" href="${i.href}"${extra}${aria}>${i.label}</a>`;
+                return `<a class="nav__link ${
+                  isActive ? "is-active" : ""
+                }" href="${i.href}"${extra}${aria}>${i.label}</a>`;
               })
               .join("")}
           </nav>
@@ -58,7 +71,6 @@
               <span class="site-footer__sep">　</span>
               <span class="site-footer__text">All rights reserved.</span>
               <span class="site-footer__sep">　</span>
-              <span class="site-footer__text">技术支持：山东智通云</span>
             </div>
           </div>
         </footer>
@@ -69,7 +81,10 @@
   renderLayoutComponents();
 
   const getCurrentPage = () => {
-    const path = (window.location && window.location.pathname) ? window.location.pathname.split("/").pop() : "";
+    const path =
+      window.location && window.location.pathname
+        ? window.location.pathname.split("/").pop()
+        : "";
     return path || "index.html";
   };
 
@@ -89,7 +104,11 @@
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
 
-  const stripHtml = (s) => String(s ?? "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  const stripHtml = (s) =>
+    String(s ?? "")
+      .replace(/<[^>]*>/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
   const fetchJson = async (url) => {
     const res = await fetch(url, { cache: "no-store" });
@@ -97,7 +116,11 @@
     return await res.json();
   };
 
-  const downloadText = (filename, text, mime = "application/json;charset=utf-8") => {
+  const downloadText = (
+    filename,
+    text,
+    mime = "application/json;charset=utf-8"
+  ) => {
     const blob = new Blob([text], { type: mime });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -158,7 +181,16 @@
       saveBtn: document.getElementById("opsSaveBtn"),
     };
 
-    if (!els.items || !els.form || !els.title || !els.category || !els.rte || !els.source || !els.rteToolbar) return;
+    if (
+      !els.items ||
+      !els.form ||
+      !els.title ||
+      !els.category ||
+      !els.rte ||
+      !els.source ||
+      !els.rteToolbar
+    )
+      return;
 
     const STORAGE_KEY = "hx_ops_news_draft_v1";
     const dataUrl = "./assets/data/news.json";
@@ -181,7 +213,9 @@
 
       // 确保 id
       out.forEach((it) => {
-        if (!it.id) it.id = slugify(it.title) || `post-${Math.random().toString(16).slice(2)}`;
+        if (!it.id)
+          it.id =
+            slugify(it.title) || `post-${Math.random().toString(16).slice(2)}`;
       });
 
       // 按日期倒序
@@ -224,7 +258,9 @@
     const filtered = () => {
       const q = searchText.trim().toLowerCase();
       if (!q) return list;
-      return list.filter((it) => `${it.title} ${it.category}`.toLowerCase().includes(q));
+      return list.filter((it) =>
+        `${it.title} ${it.category}`.toLowerCase().includes(q)
+      );
     };
 
     const renderList = () => {
@@ -241,13 +277,19 @@
           const isActive = it.id === selectedId;
           const excerpt = stripHtml(it.content).slice(0, 68);
           return `
-            <button class="ops-item ${isActive ? "is-active" : ""}" type="button" data-id="${escapeHtml(it.id)}">
+            <button class="ops-item ${
+              isActive ? "is-active" : ""
+            }" type="button" data-id="${escapeHtml(it.id)}">
               <div class="ops-item__title">${escapeHtml(it.title)}</div>
               <div class="ops-item__meta">
-                <span class="ops-item__tag">${escapeHtml(it.category || "未分类")}</span>
+                <span class="ops-item__tag">${escapeHtml(
+                  it.category || "未分类"
+                )}</span>
                 <span class="ops-item__date">${escapeHtml(it.date || "")}</span>
               </div>
-              <div class="ops-item__excerpt">${escapeHtml(excerpt)}${excerpt.length >= 68 ? "…" : ""}</div>
+              <div class="ops-item__excerpt">${escapeHtml(excerpt)}${
+            excerpt.length >= 68 ? "…" : ""
+          }</div>
             </button>
           `.trim();
         })
@@ -263,7 +305,8 @@
     const renderEditor = () => {
       const item = list.find((x) => x.id === selectedId) || null;
       if (!item) {
-        if (els.editorTitle) els.editorTitle.textContent = "选择一篇文章进行编辑";
+        if (els.editorTitle)
+          els.editorTitle.textContent = "选择一篇文章进行编辑";
         if (els.meta) els.meta.textContent = "";
         els.title.value = "";
         els.category.value = "";
@@ -308,7 +351,9 @@
       await loadInitial();
     } catch (e) {
       if (els.app) {
-        els.app.innerHTML = `<div class="news__empty">加载失败：${escapeHtml(e?.message || String(e))}</div>`;
+        els.app.innerHTML = `<div class="news__empty">加载失败：${escapeHtml(
+          e?.message || String(e)
+        )}</div>`;
       }
       return;
     }
@@ -419,7 +464,8 @@
       const action = btn.getAttribute("data-action");
       const val = btn.getAttribute("data-value");
       if (cmd) {
-        if (cmd === "formatBlock") exec("formatBlock", (val || "p").toUpperCase());
+        if (cmd === "formatBlock")
+          exec("formatBlock", (val || "p").toUpperCase());
         else exec(cmd);
         return;
       }
@@ -447,7 +493,8 @@
       isSource = on;
       els.source.hidden = !on;
       els.rte.hidden = on;
-      if (els.toggleSourceBtn) els.toggleSourceBtn.textContent = on ? "富文本" : "源码";
+      if (els.toggleSourceBtn)
+        els.toggleSourceBtn.textContent = on ? "富文本" : "源码";
       if (on) {
         els.source.value = els.rte.innerHTML || "";
         els.source.focus();
@@ -456,7 +503,9 @@
         focusRte();
       }
     };
-    els.toggleSourceBtn?.addEventListener("click", () => setSourceMode(!isSource));
+    els.toggleSourceBtn?.addEventListener("click", () =>
+      setSourceMode(!isSource)
+    );
     els.source.addEventListener("input", () => {
       if (!isSource) return;
       els.rte.innerHTML = els.source.value || "";
@@ -490,7 +539,9 @@
         }
         const handle = await window.showSaveFilePicker({
           suggestedName: "new.json",
-          types: [{ description: "JSON", accept: { "application/json": [".json"] } }],
+          types: [
+            { description: "JSON", accept: { "application/json": [".json"] } },
+          ],
         });
         const writable = await handle.createWritable();
         await writable.write(exportJson());
@@ -505,7 +556,9 @@
 
     // reload from assets/data/news.json (discard draft)
     els.reloadBtn?.addEventListener("click", async () => {
-      const ok = window.confirm("重新加载会丢弃当前草稿（localStorage）。确认继续？");
+      const ok = window.confirm(
+        "重新加载会丢弃当前草稿（localStorage）。确认继续？"
+      );
       if (!ok) return;
       window.localStorage.removeItem(STORAGE_KEY);
       els.items.innerHTML = `<div class="news__empty">加载中…</div>`;
@@ -514,7 +567,10 @@
       try {
         await loadInitial();
       } catch (e) {
-        if (els.app) els.app.innerHTML = `<div class="news__empty">加载失败：${escapeHtml(e?.message || String(e))}</div>`;
+        if (els.app)
+          els.app.innerHTML = `<div class="news__empty">加载失败：${escapeHtml(
+            e?.message || String(e)
+          )}</div>`;
         return;
       }
       renderList();
@@ -585,7 +641,9 @@
     });
 
     if (normalized.length === 0 && host) {
-      host.innerHTML = `<div class="news__empty">新闻数据为空或格式不正确：请检查 <code>${escapeHtml(dataUrl)}</code> 是否为数组且每条包含 <code>id</code>、<code>title</code>。</div>`;
+      host.innerHTML = `<div class="news__empty">新闻数据为空或格式不正确：请检查 <code>${escapeHtml(
+        dataUrl
+      )}</code> 是否为数组且每条包含 <code>id</code>、<code>title</code>。</div>`;
       return;
     }
 
@@ -597,7 +655,10 @@
       const pageSize = 6;
       const total = normalized.length;
       const totalPages = Math.max(1, Math.ceil(total / pageSize));
-      const currentPage = Math.min(totalPages, Math.max(1, Number(getQuery("page") || 1)));
+      const currentPage = Math.min(
+        totalPages,
+        Math.max(1, Number(getQuery("page") || 1))
+      );
       const start = (currentPage - 1) * pageSize;
       const pageItems = normalized.slice(start, start + pageSize);
 
@@ -609,14 +670,22 @@
             const excerpt = stripHtml(it.content).slice(0, 120);
             const href = `./news-detail.html?id=${encodeURIComponent(it.id)}`;
             return `
-              <a class="news-item" href="${href}" aria-label="${escapeHtml(it.title)}">
+              <a class="news-item" href="${href}" aria-label="${escapeHtml(
+              it.title
+            )}">
                 <div class="news-item__head">
                   <div class="news-item__title">${escapeHtml(it.title)}</div>
-                  <time class="news-item__date" datetime="${escapeHtml(it.date)}">${escapeHtml(it.date)}</time>
+                  <time class="news-item__date" datetime="${escapeHtml(
+                    it.date
+                  )}">${escapeHtml(it.date)}</time>
                 </div>
-                <p class="news-item__excerpt">${escapeHtml(excerpt)}${excerpt.length >= 120 ? "…" : ""}</p>
+                <p class="news-item__excerpt">${escapeHtml(excerpt)}${
+              excerpt.length >= 120 ? "…" : ""
+            }</p>
                 <div class="news-item__foot">
-                  <span class="news-item__tag">${escapeHtml(it.category || "新闻资讯")}</span>
+                  <span class="news-item__tag">${escapeHtml(
+                    it.category || "新闻资讯"
+                  )}</span>
                 </div>
               </a>
             `.trim();
@@ -626,7 +695,11 @@
 
       const mkLink = (p, label, disabled = false, aria = "") => {
         const href = `./news.html?page=${p}`;
-        return `<a class="news-pager__btn ${disabled ? "is-disabled" : ""}" href="${disabled ? "javascript:void(0)" : href}" ${disabled ? 'aria-disabled="true"' : ""} ${aria}>${label}</a>`;
+        return `<a class="news-pager__btn ${
+          disabled ? "is-disabled" : ""
+        }" href="${disabled ? "javascript:void(0)" : href}" ${
+          disabled ? 'aria-disabled="true"' : ""
+        } ${aria}>${label}</a>`;
       };
 
       const nums = [];
@@ -639,11 +712,28 @@
 
       pagerEl.innerHTML = `
         <div class="news-pager">
-          ${mkLink(currentPage - 1, "‹", currentPage <= 1, 'aria-label="上一页"')}
+          ${mkLink(
+            currentPage - 1,
+            "‹",
+            currentPage <= 1,
+            'aria-label="上一页"'
+          )}
           ${nums
-            .map((n) => mkLink(n, n, false, n === currentPage ? 'aria-current="page"' : ""))
+            .map((n) =>
+              mkLink(
+                n,
+                n,
+                false,
+                n === currentPage ? 'aria-current="page"' : ""
+              )
+            )
             .join("")}
-          ${mkLink(currentPage + 1, "›", currentPage >= totalPages, 'aria-label="下一页"')}
+          ${mkLink(
+            currentPage + 1,
+            "›",
+            currentPage >= totalPages,
+            'aria-label="下一页"'
+          )}
           <span class="news-pager__meta">共${totalPages}页</span>
           <label class="news-pager__jump">
             <span>到第</span>
@@ -694,17 +784,21 @@
       titleEl.textContent = item.title;
       dateEl.textContent = item.date;
       catEl.textContent = item.category || "新闻资讯";
-      bodyEl.innerHTML = item.content || `<p>${escapeHtml(stripHtml(item.content))}</p>`;
+      bodyEl.innerHTML =
+        item.content || `<p>${escapeHtml(stripHtml(item.content))}</p>`;
       document.title = `${item.title} - 新闻详情`;
       if (crumbEl) crumbEl.textContent = item.title;
 
       // 上一篇/下一篇（按列表排序）
       const prev = idx > 0 ? normalized[idx - 1] : null;
-      const next = idx >= 0 && idx < normalized.length - 1 ? normalized[idx + 1] : null;
+      const next =
+        idx >= 0 && idx < normalized.length - 1 ? normalized[idx + 1] : null;
 
       if (prevLink && prevTitle) {
         if (prev) {
-          prevLink.href = `./news-detail.html?id=${encodeURIComponent(prev.id)}`;
+          prevLink.href = `./news-detail.html?id=${encodeURIComponent(
+            prev.id
+          )}`;
           prevTitle.textContent = prev.title;
           prevLink.classList.remove("is-disabled");
           prevLink.setAttribute("aria-disabled", "false");
@@ -718,7 +812,9 @@
 
       if (nextLink && nextTitle) {
         if (next) {
-          nextLink.href = `./news-detail.html?id=${encodeURIComponent(next.id)}`;
+          nextLink.href = `./news-detail.html?id=${encodeURIComponent(
+            next.id
+          )}`;
           nextTitle.textContent = next.title;
           nextLink.classList.remove("is-disabled");
           nextLink.setAttribute("aria-disabled", "false");
@@ -735,7 +831,9 @@
   const initProducts = async () => {
     const page = getCurrentPage();
     const isDetail = page === "product-detail.html";
-    const hosts = Array.from(document.querySelectorAll('[data-component="product-center"]'));
+    const hosts = Array.from(
+      document.querySelectorAll('[data-component="product-center"]')
+    );
     if (hosts.length === 0 && !isDetail) return;
 
     const dataUrl = "./assets/data/products.json";
@@ -772,7 +870,9 @@
     const renderCenter = (host) => {
       const scope = String(host.getAttribute("data-scope") || "");
       const cats = scope ? normCats.filter((c) => c.scope === scope) : normCats;
-      const products = scope ? normProducts.filter((p) => cats.some((c) => c.id === p.categoryId)) : normProducts;
+      const products = scope
+        ? normProducts.filter((p) => cats.some((c) => c.id === p.categoryId))
+        : normProducts;
 
       if (cats.length === 0) {
         host.innerHTML = `<div class="news__empty">暂无分类。</div>`;
@@ -780,7 +880,8 @@
       }
 
       const queryCat = getQuery("cat");
-      let activeCat = queryCat && cats.some((c) => c.id === queryCat) ? queryCat : cats[0].id;
+      let activeCat =
+        queryCat && cats.some((c) => c.id === queryCat) ? queryCat : cats[0].id;
 
       const render = () => {
         const list = products.filter((p) => p.categoryId === activeCat);
@@ -790,21 +891,36 @@
               ${cats
                 .map((c) => {
                   const isActive = c.id === activeCat;
-                  return `<button class="product-tab ${isActive ? "is-active" : ""}" type="button" role="tab" aria-selected="${isActive ? "true" : "false"}" data-cat="${escapeHtml(c.id)}">${escapeHtml(c.label)}</button>`;
+                  return `<button class="product-tab ${
+                    isActive ? "is-active" : ""
+                  }" type="button" role="tab" aria-selected="${
+                    isActive ? "true" : "false"
+                  }" data-cat="${escapeHtml(c.id)}">${escapeHtml(
+                    c.label
+                  )}</button>`;
                 })
                 .join("")}
             </div>
             <div class="product-grid" aria-label="产品列表">
               ${list
                 .map((p) => {
-                  const cover = p.cover || p.images[0] || "./assets/bg/home-1.jpg.webp";
-                  const href = `./product-detail.html?id=${encodeURIComponent(p.id)}&cat=${encodeURIComponent(activeCat)}`;
+                  const cover =
+                    p.cover || p.images[0] || "./assets/bg/home-1.jpg.webp";
+                  const href = `./product-detail.html?id=${encodeURIComponent(
+                    p.id
+                  )}&cat=${encodeURIComponent(activeCat)}`;
                   return `
-                    <a class="product-card" href="${href}" aria-label="${escapeHtml(p.title)}">
+                    <a class="product-card" href="${href}" aria-label="${escapeHtml(
+                    p.title
+                  )}">
                       <div class="product-card__imgWrap">
-                        <img class="product-card__img" src="${escapeHtml(cover)}" alt="" loading="lazy" />
+                        <img class="product-card__img" src="${escapeHtml(
+                          cover
+                        )}" alt="" loading="lazy" />
                       </div>
-                      <div class="product-card__title">${escapeHtml(p.title)}</div>
+                      <div class="product-card__title">${escapeHtml(
+                        p.title
+                      )}</div>
                     </a>
                   `.trim();
                 })
@@ -866,7 +982,8 @@
     if (contactEl) contactEl.textContent = item.contact;
     if (phoneEl) phoneEl.textContent = item.phone;
     if (addrEl) addrEl.textContent = item.address;
-    if (descEl) descEl.textContent = item.summary || getCatLabel(item.categoryId);
+    if (descEl)
+      descEl.textContent = item.summary || getCatLabel(item.categoryId);
     if (callBtn) callBtn.href = `tel:${item.phone || defaults.phone || ""}`;
     if (bookBtn) bookBtn.href = "./contact.html";
     if (shareEl) {
@@ -887,7 +1004,9 @@
       });
     }
 
-    const images = (item.images && item.images.length ? item.images : [item.cover]).filter(Boolean);
+    const images = (
+      item.images && item.images.length ? item.images : [item.cover]
+    ).filter(Boolean);
     let active = 0;
     const setActive = (i) => {
       active = Math.max(0, Math.min(images.length - 1, i));
@@ -897,12 +1016,19 @@
     };
 
     dotsEl.innerHTML = images
-      .map((_, i) => `<button class="product-dot ${i === 0 ? "is-active" : ""}" type="button" aria-label="切换图片 ${i + 1}"></button>`)
+      .map(
+        (_, i) =>
+          `<button class="product-dot ${
+            i === 0 ? "is-active" : ""
+          }" type="button" aria-label="切换图片 ${i + 1}"></button>`
+      )
       .join("");
     dotsEl.addEventListener("click", (e) => {
       const btn = e.target?.closest?.(".product-dot");
       if (!btn) return;
-      const idx = Array.from(dotsEl.querySelectorAll(".product-dot")).indexOf(btn);
+      const idx = Array.from(dotsEl.querySelectorAll(".product-dot")).indexOf(
+        btn
+      );
       if (idx >= 0) setActive(idx);
     });
 
@@ -916,7 +1042,9 @@
       const page = getCurrentPage();
       const isList = page === "news.html";
       const isDetail = page === "news-detail.html";
-      const host = document.getElementById(isList ? "newsApp" : isDetail ? "newsDetailApp" : "");
+      const host = document.getElementById(
+        isList ? "newsApp" : isDetail ? "newsDetailApp" : ""
+      );
       if (host) {
         host.innerHTML = `
           <div class="news__empty">
@@ -980,10 +1108,15 @@
     const target = items[active];
     if (opts.scrollIntoView && target) {
       try {
-        target.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        target.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest",
+        });
       } catch {
         // Safari older fallback
-        const left = target.offsetLeft - (track.clientWidth - target.clientWidth) / 2;
+        const left =
+          target.offsetLeft - (track.clientWidth - target.clientWidth) / 2;
         track.scrollLeft = left;
       }
     }
@@ -1162,5 +1295,3 @@
   // 如果用户系统偏好减少动画，确保不跑定时器
   if (prefersReducedMotion) clearTimers();
 })();
-
-

@@ -8,8 +8,7 @@
     { "id": "parts", "label": "分选机配件", "scope": "food" },
     { "id": "bubble", "label": "气泡清洗机", "scope": "food" },
     { "id": "new", "label": "分选机（上新）", "scope": "food" },
-
-    { "id": "pipechain", "label": "管链输送机", "scope": "environment" }
+    { "id": "env", "label": "环保产品", "scope": "environment" }
   ],
   "defaults": {
     "brand": "莱州市双鑫自动化设备有限公司",
@@ -52,11 +51,35 @@
     },
     {
       "id": "poultry-sorter",
-      "title": "禽肉类分选机",
+      "title": "禽肉分选机",
       "categoryId": "poultry",
       "cover": "./assets/food/pic-1.jpg.webp",
       "images": ["./assets/food/pic-1.jpg.webp", "./assets/food/pic-2.jpg.webp"],
-      "summary": "适用于禽肉类按重量自动分级分选。"
+      "summary": "适用于禽肉类按重量自动分级分选（图片可后续替换为对应产品实拍图）。"
+    },
+    {
+      "id": "poultry-wing-sorter",
+      "title": "鸡鸭翅分选机",
+      "categoryId": "poultry",
+      "cover": "./assets/food/pic-2.jpg.webp",
+      "images": ["./assets/food/pic-2.jpg.webp", "./assets/food/pic-3.jpg.webp"],
+      "summary": "适用于鸡鸭翅等产品的重量分选分级（图片可后续替换为对应产品实拍图）。"
+    },
+    {
+      "id": "poultry-leg-sorter",
+      "title": "鸡鸭腿分选机",
+      "categoryId": "poultry",
+      "cover": "./assets/food/pic-3.jpg.webp",
+      "images": ["./assets/food/pic-3.jpg.webp", "./assets/food/pic-1.jpg.webp"],
+      "summary": "适用于鸡鸭腿等产品的重量分选分级（图片可后续替换为对应产品实拍图）。"
+    },
+    {
+      "id": "poultry-feet-sorter",
+      "title": "鸡鸭爪分选机",
+      "categoryId": "poultry",
+      "cover": "./assets/bg/home-4.jpg.webp",
+      "images": ["./assets/bg/home-4.jpg.webp", "./assets/bg/home-2.jpg.webp"],
+      "summary": "适用于鸡鸭爪等产品的重量分选分级（图片可后续替换为对应产品实拍图）。"
     },
     {
       "id": "fruit-veg-sorter",
@@ -75,12 +98,28 @@
       "summary": "利用气泡翻滚对物料进行清洗，干净卫生。"
     },
     {
-      "id": "pipe-chain-conveyor",
-      "title": "管链输送机",
-      "categoryId": "pipechain",
-      "cover": "./assets/powder/feature-1.jpg.webp",
-      "images": ["./assets/powder/feature-1.jpg.webp", "./assets/powder/feature-2.jpg.webp", "./assets/powder/feature-3.jpg.webp"],
-      "summary": "适用于粉体/颗粒物料输送，满足倾斜、转弯、垂直等工况。"
+      "id": "microfilter",
+      "title": "微滤机",
+      "categoryId": "env",
+      "cover": "./assets/environment/feat-2.png.webp",
+      "images": [
+        "./assets/environment/feat-2.png.webp",
+        "./assets/environment/feat-1.png.webp",
+        "./assets/environment/feat-4.png.webp"
+      ],
+      "summary": "环保设备：微滤机（使用项目内已有实拍图展示）。"
+    },
+    {
+      "id": "env-equipment-2",
+      "title": "环保设备",
+      "categoryId": "env",
+      "cover": "./assets/environment/feat-3.png.webp",
+      "images": [
+        "./assets/environment/feat-3.png.webp",
+        "./assets/environment/feat-5.png.webp",
+        "./assets/environment/feat-6.png.webp"
+      ],
+      "summary": "环保设备产品展示（可替换为你的实际产品图与名称）。"
     }
   ]
 }
