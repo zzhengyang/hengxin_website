@@ -32,6 +32,103 @@ body{
   background: #0b2048;
 }
 
+/* ----------------------------
+   手机竖屏预览模式（自动：手机横屏且高度较矮；或 ?m=1 强制）
+----------------------------- */
+html.is-mobile-portrait-preview body{
+  background: #0b1020;
+}
+html.is-mobile-portrait-preview .page{
+  max-width: 430px;
+  margin: 0 auto;
+  box-shadow: 0 28px 80px rgba(0,0,0,.40);
+  background: transparent;
+}
+html.is-mobile-portrait-preview .topbar{
+  left: 50%;
+  right: auto;
+  width: min(430px, 100%);
+  transform: translateX(-50%);
+}
+html.is-mobile-portrait-preview .hero,
+html.is-mobile-portrait-preview .subpage{
+  min-height: 100vh;
+}
+html.is-mobile-portrait-preview .sub-hero{
+  border-radius: 0;
+}
+
+/* 竖屏预览下也走“手机抽屉导航”方案（不再强制显示横向滚动 nav） */
+
+.viewport-hint{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  z-index: 60;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.viewport-hint__inner{
+  pointer-events: auto;
+  width: min(720px, calc(100% - 24px));
+  background: rgba(14,26,42,.88);
+  color: rgba(255,255,255,.92);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.viewport-hint__text{
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: .95;
+}
+.viewport-hint__btn{
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.viewport-hint__btn:hover{
+  background: rgba(255,255,255,.12);
+}
+
+/* ----------------------------
+   手机端导航：汉堡按钮 + 全屏抽屉（参考截图）
+----------------------------- */
+.nav-toggle{
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: rgba(255,255,255,.96);
+}
+.nav-toggle__bar{
+  display: block;
+  height: 3px;
+  margin: 6px 0;
+  background: currentColor;
+  border-radius: 999px;
+  box-shadow: none;
+}
+.mnav{ display: none; }
+
 a{ color: inherit; text-decoration: none; }
 button{ font: inherit; }
 .sr-only{
@@ -419,6 +516,108 @@ button{ font: inherit; }
   .entry{ grid-template-columns: 1fr; }
   .hero__content{ padding-top: 40px; }
   .site-footer__text{ white-space: normal; }
+}
+
+@media (max-width: 960px){
+  .topbar{
+    background: #1c57b6;
+    height: 64px;
+    padding: 0 12px;
+    justify-content: space-between;
+  }
+  .nav-toggle{
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .topbar--premium .brand--img{
+    margin: 0 auto;
+  }
+  .topbar--premium .brand--img .brand__fullLogo{
+    height: 42px;
+  }
+
+  .mnav{
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease;
+    z-index: 80;
+  }
+  html.is-mnav-open .mnav{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  html.is-mnav-open body{ overflow: hidden; }
+
+  .mnav__close{
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: transparent;
+    font-size: 34px;
+    line-height: 40px;
+    color: rgba(14,26,42,.42);
+    cursor: pointer;
+  }
+  .mnav__list{
+    padding-top: 70px;
+  }
+  .mnav__link{
+    display: block;
+    padding: 18px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    color: rgba(14,26,42,.70);
+    border-top: 1px solid rgba(15,23,42,.08);
+    text-decoration: none;
+  }
+  .mnav__link.is-active{
+    color: rgba(28,87,182,.96);
+  }
+}
+
+/* 竖屏预览模式（?m=1）在桌面宽屏下也启用“手机导航” */
+html.is-mobile-portrait-preview .nav{ display: none !important; }
+html.is-mobile-portrait-preview .nav-toggle{
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+html.is-mobile-portrait-preview .topbar{
+  background: #1c57b6;
+  justify-content: space-between;
+}
+html.is-mobile-portrait-preview .mnav{
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+  z-index: 80;
+}
+html.is-mobile-portrait-preview.is-mnav-open .mnav{
+  opacity: 1;
+  pointer-events: auto;
+}
+html.is-mobile-portrait-preview.is-mnav-open body{ overflow: hidden; }
+html.is-mobile-portrait-preview .mnav__list{ padding-top: 70px; }
+html.is-mobile-portrait-preview .mnav__link{
+  padding: 18px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: rgba(14,26,42,.70);
+  border-top: 1px solid rgba(15,23,42,.08);
 }
 
 @media (prefers-reduced-motion: reduce){

@@ -27,6 +27,12 @@
     if (headerHost) {
       headerHost.innerHTML = `
         <header class="topbar topbar--premium">
+          <button class="nav-toggle" type="button" aria-label="打开导航菜单" aria-controls="mobileNav" aria-expanded="false">
+            <span class="nav-toggle__bar"></span>
+            <span class="nav-toggle__bar"></span>
+            <span class="nav-toggle__bar"></span>
+          </button>
+
           <a class="brand brand--img" href="./index.html" aria-label="返回首页">
             <span class="brand__logo" aria-hidden="true">
               <img class="brand__fullLogo" src="./assets/img/logo.png" alt="双鑫自动化" />
@@ -53,6 +59,33 @@
               })
               .join("")}
           </nav>
+
+          <div class="mnav" id="mobileNav" aria-hidden="true">
+            <button class="mnav__close" type="button" aria-label="关闭导航菜单">×</button>
+            <div class="mnav__list" role="menu">
+              ${navItems
+                .map((i) => {
+                  const isExternal =
+                    Boolean(i.external) || /^https?:\/\//.test(i.href);
+                  const hrefKey = i.href.replace("./", "");
+                  const isActive =
+                    !isExternal &&
+                    (hrefKey === current ||
+                      (current === "news-detail.html" &&
+                        hrefKey === "news.html"));
+                  const extra = isExternal
+                    ? ' target="_blank" rel="noopener noreferrer"'
+                    : "";
+                  const aria = isActive ? ' aria-current="page"' : "";
+                  return `<a class="mnav__link ${
+                    isActive ? "is-active" : ""
+                  }" role="menuitem" href="${i.href}"${extra}${aria}>${
+                    i.label
+                  }</a>`;
+                })
+                .join("")}
+            </div>
+          </div>
         </header>
       `.trim();
     }
@@ -79,6 +112,117 @@
   };
 
   renderLayoutComponents();
+
+  // 手机端抽屉导航（汉堡菜单）
+  const initMobileNav = () => {
+    const toggle = document.querySelector(".nav-toggle");
+    const panel = document.getElementById("mobileNav");
+    if (!toggle || !panel) return;
+
+    const open = () => {
+      document.documentElement.classList.add("is-mnav-open");
+      panel.setAttribute("aria-hidden", "false");
+      toggle.setAttribute("aria-expanded", "true");
+    };
+    const close = () => {
+      document.documentElement.classList.remove("is-mnav-open");
+      panel.setAttribute("aria-hidden", "true");
+      toggle.setAttribute("aria-expanded", "false");
+    };
+
+    toggle.addEventListener("click", () => {
+      const isOpen =
+        document.documentElement.classList.contains("is-mnav-open");
+      if (isOpen) close();
+      else open();
+    });
+
+    panel.querySelector(".mnav__close")?.addEventListener("click", close);
+    panel.addEventListener("click", (e) => {
+      const link = e.target?.closest?.(".mnav__link");
+      if (link) close();
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close();
+    });
+  };
+
+  initMobileNav();
+
+  const initViewportMode = () => {
+    const root = document.documentElement;
+    const KEY = "is-mobile-portrait-preview";
+    const params = (() => {
+      try {
+        return new URLSearchParams(window.location.search);
+      } catch {
+        return null;
+      }
+    })();
+
+    const isLikelyMobile =
+      typeof navigator !== "undefined" &&
+      /Android|iPhone|iPad|iPod/i.test(String(navigator.userAgent || ""));
+
+    const getOrientationLandscape = () => {
+      try {
+        if (typeof window.matchMedia === "function") {
+          return window.matchMedia("(orientation: landscape)").matches;
+        }
+      } catch {
+        // ignore
+      }
+      return (window.innerWidth || 0) > (window.innerHeight || 0);
+    };
+
+    const shouldAutoPortraitPreview = () => {
+      // 典型“手机横屏”的窗口：高度较小且为横屏
+      const isLandscape = getOrientationLandscape();
+      const h = window.innerHeight || 0;
+      const w = window.innerWidth || 0;
+      return isLikelyMobile && isLandscape && h > 0 && w > 0 && h <= 520;
+    };
+
+    const forced =
+      params && (params.get("m") === "1" || params.get("view") === "mobile");
+
+    const ensureHint = () => {
+      let el = document.getElementById("viewportHint");
+      if (el) return el;
+      el = document.createElement("div");
+      el.id = "viewportHint";
+      el.className = "viewport-hint";
+      el.innerHTML = `
+        <div class="viewport-hint__inner">
+          <div class="viewport-hint__text">已启用手机竖屏预览模式（建议将手机旋转为竖屏浏览）。</div>
+          <button class="viewport-hint__btn" type="button" id="viewportHintClose">关闭</button>
+        </div>
+      `.trim();
+      document.body.appendChild(el);
+      el.querySelector("#viewportHintClose")?.addEventListener("click", () => {
+        root.classList.remove(KEY);
+        el.remove();
+      });
+      return el;
+    };
+
+    const apply = () => {
+      const auto = shouldAutoPortraitPreview();
+      const on = Boolean(forced || auto);
+      root.classList.toggle(KEY, on);
+      const hint = document.getElementById("viewportHint");
+      if (on) ensureHint();
+      else hint?.remove();
+    };
+
+    apply();
+    window.addEventListener("resize", apply);
+    window.addEventListener("orientationchange", apply);
+  };
+
+  // 视口模式：窄屏天然响应式；在“手机横屏且高度较矮”场景自动启用竖屏预览；也支持 ?m=1 强制预览
+  initViewportMode();
 
   const getCurrentPage = () => {
     const path =
