@@ -113,6 +113,72 @@
 
   renderLayoutComponents();
 
+  // 全站：回到顶部按钮
+  const initBackTop = () => {
+    if (document.getElementById("backTop")) return;
+    const btn = document.createElement("button");
+    btn.id = "backTop";
+    btn.className = "backtop";
+    btn.type = "button";
+    btn.setAttribute("aria-label", "回到顶部");
+    btn.innerHTML = `<span class="backtop__icon" aria-hidden="true">↑</span>`;
+    document.body.appendChild(btn);
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const update = () => {
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      btn.classList.toggle("is-visible", y > 420);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+
+    btn.addEventListener("click", () => {
+      try {
+        window.scrollTo({
+          top: 0,
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+        });
+      } catch {
+        window.scrollTo(0, 0);
+      }
+    });
+  };
+
+  initBackTop();
+
+  // 兜底：确保窄屏/预览模式下汉堡按钮可见（避免被某些环境样式覆盖）
+  const ensureHamburgerVisible = () => {
+    const toggle = document.querySelector(".nav-toggle");
+    if (!toggle) return;
+    const isPreview = document.documentElement.classList.contains(
+      "is-mobile-portrait-preview"
+    );
+    let isNarrow = false;
+    try {
+      isNarrow =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(max-width: 960px)").matches;
+    } catch {
+      isNarrow = (window.innerWidth || 0) <= 960;
+    }
+    if (!isNarrow && !isPreview) return;
+
+    toggle.style.display = "inline-flex";
+    toggle.style.color = "#fff";
+    toggle.style.zIndex = "95";
+    const bars = toggle.querySelectorAll(".nav-toggle__bar");
+    bars.forEach((b) => {
+      b.style.background = "#fff";
+    });
+  };
+
+  ensureHamburgerVisible();
+  window.addEventListener("resize", ensureHamburgerVisible);
+
   // 手机端抽屉导航（汉堡菜单）
   const initMobileNav = () => {
     const toggle = document.querySelector(".nav-toggle");
@@ -289,6 +355,676 @@
     const d = new Date();
     const pad = (n) => String(n).padStart(2, "0");
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  };
+
+  const initOpsTabs = async () => {
+    const tabNews = document.getElementById("opsTabNews");
+    const tabProducts = document.getElementById("opsTabProducts");
+    const panelNews = document.getElementById("opsNewsPanel");
+    const panelProducts = document.getElementById("opsProductsPanel");
+    const titleEl = document.getElementById("opsPageTitle");
+
+    if (!tabNews || !tabProducts || !panelNews || !panelProducts) return;
+
+    const STORAGE_KEY = "hx_ops_active_tab_v1";
+    const queryTab = String(getQuery("tab") || "").toLowerCase();
+    const saved = String(window.localStorage.getItem(STORAGE_KEY) || "");
+    const initial =
+      queryTab === "products" || queryTab === "product"
+        ? "products"
+        : queryTab === "news" || queryTab === "article"
+        ? "news"
+        : saved === "products" || saved === "news"
+        ? saved
+        : "news";
+
+    const setTab = (tab) => {
+      const isNews = tab === "news";
+      panelNews.hidden = !isNews;
+      panelProducts.hidden = isNews;
+
+      tabNews.classList.toggle("is-active", isNews);
+      tabProducts.classList.toggle("is-active", !isNews);
+      tabNews.setAttribute("aria-selected", isNews ? "true" : "false");
+      tabProducts.setAttribute("aria-selected", !isNews ? "true" : "false");
+
+      try {
+        window.localStorage.setItem(STORAGE_KEY, isNews ? "news" : "products");
+      } catch {
+        // ignore
+      }
+
+      if (titleEl) titleEl.textContent = isNews ? "文章管理" : "产品管理";
+      document.title = isNews ? "运维 - 文章管理" : "运维 - 产品管理";
+
+      // 同步 URL（便于分享/刷新保持）
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("tab", isNews ? "news" : "products");
+        window.history.replaceState({}, "", url.toString());
+      } catch {
+        // ignore
+      }
+    };
+
+    tabNews.addEventListener("click", () => setTab("news"));
+    tabProducts.addEventListener("click", () => setTab("products"));
+    setTab(initial);
+  };
+
+  const initOpsProducts = async () => {
+    const els = {
+      app: document.getElementById("popsApp"),
+      items: document.getElementById("popsItems"),
+      count: document.getElementById("popsCount"),
+      search: document.getElementById("popsSearch"),
+      filterCat: document.getElementById("popsFilterCat"),
+      addBtn: document.getElementById("popsAddBtn"),
+      exportBtn: document.getElementById("popsExportBtn"),
+      saveFileBtn: document.getElementById("popsSaveFileBtn"),
+      reloadBtn: document.getElementById("popsReloadBtn"),
+      importBtn: document.getElementById("popsImportBtn"),
+      fileInput: document.getElementById("popsFileInput"),
+      form: document.getElementById("popsForm"),
+      title: document.getElementById("popsTitle"),
+      categoryId: document.getElementById("popsCategoryId"),
+      cover: document.getElementById("popsCover"),
+      images: document.getElementById("popsImages"),
+      summary: document.getElementById("popsSummary"),
+      brand: document.getElementById("popsBrand"),
+      contact: document.getElementById("popsContact"),
+      phone: document.getElementById("popsPhone"),
+      address: document.getElementById("popsAddress"),
+      meta: document.getElementById("popsMeta"),
+      editorTitle: document.getElementById("popsEditorTitle"),
+      deleteBtn: document.getElementById("popsDeleteBtn"),
+      dupBtn: document.getElementById("popsDuplicateBtn"),
+      saveBtn: document.getElementById("popsSaveBtn"),
+      uploadCoverBtn: document.getElementById("popsUploadCoverBtn"),
+      uploadImagesBtn: document.getElementById("popsUploadImagesBtn"),
+      uploadInput: document.getElementById("popsUploadInput"),
+    };
+
+    if (!els.items || !els.form || !els.title || !els.categoryId) return;
+
+    const STORAGE_KEY = "hx_ops_products_draft_v1";
+    const dataUrl = "./assets/data/products.json";
+
+    // 本地“静态文件”上传（需要配合 tools/upload_server.py 提供 /api/upload）
+    const LOCAL_UPLOAD = {
+      endpoint: "/api/upload",
+      maxSize: 8 * 1024 * 1024,
+    };
+
+    let categories = [];
+    let defaults = { brand: "", contact: "", phone: "", address: "" };
+    let products = [];
+    let selectedId = null;
+    let searchText = "";
+    let filterCat = "all";
+
+    const normalizeCats = (cats) =>
+      (Array.isArray(cats) ? cats : [])
+        .map((c) => ({
+          id: String(c?.id ?? ""),
+          label: String(c?.label ?? ""),
+          scope: String(c?.scope ?? ""),
+        }))
+        .filter((c) => c.id && c.label);
+
+    const normalizeDefaults = (d) => ({
+      brand: String(d?.brand ?? ""),
+      contact: String(d?.contact ?? ""),
+      phone: String(d?.phone ?? ""),
+      address: String(d?.address ?? ""),
+    });
+
+    const normalizeProducts = (items) => {
+      const arr = Array.isArray(items) ? items : [];
+      const out = arr
+        .map((p) => ({
+          id: String(p?.id ?? ""),
+          title: String(p?.title ?? ""),
+          categoryId: String(p?.categoryId ?? ""),
+          cover: String(p?.cover ?? ""),
+          images: Array.isArray(p?.images) ? p.images.map(String) : [],
+          summary: String(p?.summary ?? ""),
+          brand: String(p?.brand ?? ""),
+          contact: String(p?.contact ?? ""),
+          phone: String(p?.phone ?? ""),
+          address: String(p?.address ?? ""),
+        }))
+        .filter((p) => p.title);
+
+      // ensure id
+      out.forEach((p) => {
+        if (!p.id)
+          p.id =
+            slugify(p.title) || `prod-${Math.random().toString(16).slice(2)}`;
+      });
+
+      // ensure categoryId
+      const catIds = new Set(categories.map((c) => c.id));
+      out.forEach((p) => {
+        if (!p.categoryId || !catIds.has(p.categoryId)) {
+          p.categoryId = categories[0]?.id || "";
+        }
+      });
+
+      // sort by title
+      out.sort((a, b) => a.title.localeCompare(b.title, "zh-Hans-CN"));
+      return out.filter((p) => p.id && p.title && p.categoryId);
+    };
+
+    const getCatLabel = (id) =>
+      categories.find((c) => c.id === id)?.label || "未分类";
+
+    const loadInitial = async () => {
+      const draft = window.localStorage.getItem(STORAGE_KEY);
+      if (draft) {
+        try {
+          const parsed = JSON.parse(draft);
+          categories = normalizeCats(parsed?.categories);
+          defaults = normalizeDefaults(parsed?.defaults);
+          products = Array.isArray(parsed?.products) ? parsed.products : [];
+          if (categories.length === 0) {
+            // 如果草稿里没有分类，仍然回退到源数据
+            throw new Error("draft missing categories");
+          }
+          products = normalizeProducts(products);
+          return;
+        } catch {
+          // ignore
+        }
+      }
+
+      const data = await fetchJson(dataUrl);
+      categories = normalizeCats(data?.categories);
+      defaults = normalizeDefaults(data?.defaults);
+      products = normalizeProducts(data?.products);
+    };
+
+    const persistDraft = () => {
+      try {
+        window.localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({ categories, defaults, products }, null, 2)
+        );
+      } catch {
+        // ignore
+      }
+    };
+
+    const ensureCatOptions = () => {
+      if (!els.categoryId || !els.filterCat) return;
+      els.categoryId.innerHTML = categories
+        .map(
+          (c) =>
+            `<option value="${escapeHtml(c.id)}">${escapeHtml(
+              c.label
+            )}</option>`
+        )
+        .join("");
+      els.filterCat.innerHTML = `
+        <option value="all">全部分类</option>
+        ${categories
+          .map(
+            (c) =>
+              `<option value="${escapeHtml(c.id)}">${escapeHtml(
+                c.label
+              )}</option>`
+          )
+          .join("")}
+      `.trim();
+    };
+
+    const filtered = () => {
+      const q = searchText.trim().toLowerCase();
+      const byCat =
+        filterCat === "all"
+          ? products
+          : products.filter((p) => p.categoryId === filterCat);
+      if (!q) return byCat;
+      return byCat.filter((p) =>
+        `${p.title} ${p.summary} ${getCatLabel(p.categoryId)}`
+          .toLowerCase()
+          .includes(q)
+      );
+    };
+
+    const renderList = () => {
+      const items = filtered();
+      if (els.count) els.count.textContent = `共 ${items.length} 个`;
+      if (!els.items) return;
+      if (items.length === 0) {
+        els.items.innerHTML = `<div class="news__empty">暂无产品。</div>`;
+        return;
+      }
+
+      els.items.innerHTML = items
+        .map((p) => {
+          const isActive = p.id === selectedId;
+          const cover = p.cover || p.images?.[0] || "";
+          const excerpt = String(p.summary || "")
+            .trim()
+            .slice(0, 60);
+          return `
+            <button class="ops-item ${
+              isActive ? "is-active" : ""
+            }" type="button" data-id="${escapeHtml(p.id)}">
+              <div class="ops-item__row">
+                ${
+                  cover
+                    ? `<img class="ops-item__thumb" src="${escapeHtml(
+                        cover
+                      )}" alt="" loading="lazy" />`
+                    : `<div class="ops-item__thumb" aria-hidden="true"></div>`
+                }
+                <div class="ops-item__body">
+                  <div class="ops-item__title">${escapeHtml(p.title)}</div>
+                  <div class="ops-item__meta">
+                    <span class="ops-item__tag">${escapeHtml(
+                      getCatLabel(p.categoryId)
+                    )}</span>
+                    <span class="ops-item__date">${escapeHtml(p.id)}</span>
+                  </div>
+                  <div class="ops-item__excerpt">${escapeHtml(excerpt)}${
+            excerpt.length >= 60 ? "…" : ""
+          }</div>
+                </div>
+              </div>
+            </button>
+          `.trim();
+        })
+        .join("");
+    };
+
+    const setEditorEnabled = (enabled) => {
+      if (els.deleteBtn) els.deleteBtn.disabled = !enabled;
+      if (els.dupBtn) els.dupBtn.disabled = !enabled;
+      if (els.saveBtn) els.saveBtn.disabled = !enabled;
+    };
+
+    const renderEditor = () => {
+      const item = products.find((x) => x.id === selectedId) || null;
+      if (!item) {
+        if (els.editorTitle)
+          els.editorTitle.textContent = "选择一个产品进行编辑";
+        if (els.meta) els.meta.textContent = "";
+        els.title.value = "";
+        if (els.categoryId) els.categoryId.value = categories[0]?.id || "";
+        if (els.cover) els.cover.value = "";
+        if (els.images) els.images.value = "";
+        if (els.summary) els.summary.value = "";
+        if (els.brand) els.brand.value = "";
+        if (els.contact) els.contact.value = "";
+        if (els.phone) els.phone.value = "";
+        if (els.address) els.address.value = "";
+        setEditorEnabled(false);
+        return;
+      }
+
+      if (els.editorTitle) els.editorTitle.textContent = "编辑产品";
+      els.title.value = item.title;
+      if (els.categoryId) els.categoryId.value = item.categoryId;
+      if (els.cover) els.cover.value = item.cover || "";
+      if (els.images) els.images.value = (item.images || []).join("\n");
+      if (els.summary) els.summary.value = item.summary || "";
+      if (els.brand) els.brand.value = item.brand || "";
+      if (els.contact) els.contact.value = item.contact || "";
+      if (els.phone) els.phone.value = item.phone || "";
+      if (els.address) els.address.value = item.address || "";
+      if (els.meta) els.meta.textContent = `ID：${item.id}`;
+      setEditorEnabled(true);
+    };
+
+    const select = (id) => {
+      selectedId = id;
+      renderList();
+      renderEditor();
+    };
+
+    const upsert = (item) => {
+      const idx = products.findIndex((x) => x.id === item.id);
+      if (idx >= 0) products[idx] = item;
+      else products.unshift(item);
+      products = normalizeProducts(products);
+      persistDraft();
+    };
+
+    const removeById = (id) => {
+      products = products.filter((x) => x.id !== id);
+      persistDraft();
+    };
+
+    const uploadFilesToLocal = async (files) => {
+      const list = Array.from(files || []);
+      if (list.length === 0) return [];
+      // size guard
+      for (const f of list) {
+        if (LOCAL_UPLOAD.maxSize && f.size > LOCAL_UPLOAD.maxSize) {
+          throw new Error(
+            `文件过大：${f.name}（${Math.round(
+              f.size / 1024 / 1024
+            )}MB），请压缩后再上传`
+          );
+        }
+      }
+
+      const fd = new FormData();
+      list.forEach((f) => fd.append("files", f, f.name));
+      let res;
+      try {
+        res = await fetch(LOCAL_UPLOAD.endpoint, { method: "POST", body: fd });
+      } catch (e) {
+        throw new Error(
+          "上传接口不可用：请用本地上传服务启动（python3 tools/upload_server.py --port 5173）"
+        );
+      }
+      if (!res.ok) {
+        const t = await res.text().catch(() => "");
+        throw new Error(`上传失败：${res.status} ${t || ""}`.trim());
+      }
+      const data = await res.json();
+      const urls = Array.isArray(data?.urls) ? data.urls.map(String) : [];
+      return urls.filter(Boolean);
+    };
+
+    const appendUrlsToTextarea = (textareaEl, urls) => {
+      if (!textareaEl) return;
+      const cur = String(textareaEl.value || "").trim();
+      const curLines = cur
+        ? cur
+            .split(/\r?\n/)
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [];
+      const merged = [...curLines];
+      urls.forEach((u) => {
+        const val = String(u || "").trim();
+        if (val && !merged.includes(val)) merged.push(val);
+      });
+      textareaEl.value = merged.join("\n");
+    };
+
+    // init
+    els.items.innerHTML = `<div class="news__empty">加载中…</div>`;
+    try {
+      await loadInitial();
+    } catch (e) {
+      if (els.app) {
+        els.app.innerHTML = `<div class="news__empty">加载失败：${escapeHtml(
+          e?.message || String(e)
+        )}</div>`;
+      }
+      return;
+    }
+
+    ensureCatOptions();
+    // init filterCat from URL
+    const qCat = String(getQuery("pcat") || "");
+    if (qCat && (qCat === "all" || categories.some((c) => c.id === qCat))) {
+      filterCat = qCat;
+      if (els.filterCat) els.filterCat.value = qCat;
+    } else if (els.filterCat) {
+      els.filterCat.value = "all";
+    }
+
+    renderList();
+    renderEditor();
+
+    // list click
+    els.items.addEventListener("click", (e) => {
+      const btn = e.target?.closest?.(".ops-item");
+      const id = btn?.getAttribute?.("data-id");
+      if (!id) return;
+      select(id);
+    });
+
+    // search
+    els.search?.addEventListener("input", (e) => {
+      searchText = e.target?.value ?? "";
+      renderList();
+    });
+
+    // filter category
+    els.filterCat?.addEventListener("change", (e) => {
+      filterCat = e.target?.value || "all";
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("pcat", filterCat);
+        window.history.replaceState({}, "", url.toString());
+      } catch {
+        // ignore
+      }
+      renderList();
+    });
+
+    // add
+    els.addBtn?.addEventListener("click", () => {
+      const baseTitle = "新产品";
+      const newIdBase = slugify(baseTitle) || "new-product";
+      let id = newIdBase;
+      let i = 1;
+      while (products.some((x) => x.id === id)) {
+        id = `${newIdBase}-${i++}`;
+      }
+      const item = {
+        id,
+        title: baseTitle,
+        categoryId: categories[0]?.id || "",
+        cover: "",
+        images: [],
+        summary: "请输入产品简介…",
+        brand: "",
+        contact: "",
+        phone: "",
+        address: "",
+      };
+      upsert(item);
+      select(id);
+    });
+
+    // duplicate
+    els.dupBtn?.addEventListener("click", () => {
+      const cur = products.find((x) => x.id === selectedId);
+      if (!cur) return;
+      const newIdBase = slugify(cur.title) || "copy";
+      let id = `${newIdBase}-copy`;
+      let i = 1;
+      while (products.some((x) => x.id === id)) {
+        id = `${newIdBase}-copy-${i++}`;
+      }
+      const item = { ...cur, id, title: `${cur.title}（复制）` };
+      upsert(item);
+      select(id);
+    });
+
+    // delete
+    els.deleteBtn?.addEventListener("click", () => {
+      const cur = products.find((x) => x.id === selectedId);
+      if (!cur) return;
+      const ok = window.confirm(`确认删除：${cur.title} ？`);
+      if (!ok) return;
+      removeById(cur.id);
+      selectedId = null;
+      renderList();
+      renderEditor();
+    });
+
+    // save (in-memory + local draft)
+    els.form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const cur = products.find((x) => x.id === selectedId);
+      if (!cur) return;
+
+      const title = els.title.value.trim();
+      const categoryId = String(els.categoryId?.value || "").trim();
+      const cover = String(els.cover?.value || "").trim();
+      const imagesText = String(els.images?.value || "");
+      const images = imagesText
+        .split(/\r?\n|,/g)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const summary = String(els.summary?.value || "").trim();
+      const brand = String(els.brand?.value || "").trim();
+      const contact = String(els.contact?.value || "").trim();
+      const phone = String(els.phone?.value || "").trim();
+      const address = String(els.address?.value || "").trim();
+      if (!title || !categoryId) return;
+
+      const next = {
+        ...cur,
+        title,
+        categoryId,
+        cover,
+        images,
+        summary,
+        brand,
+        contact,
+        phone,
+        address,
+      };
+      upsert(next);
+      select(next.id);
+    });
+
+    // export (download)
+    const exportJson = () =>
+      JSON.stringify({ categories, defaults, products }, null, 2);
+    els.exportBtn?.addEventListener("click", () => {
+      downloadText("products.json", exportJson());
+    });
+
+    // save to file (File System Access API, chromium)
+    els.saveFileBtn?.addEventListener("click", async () => {
+      try {
+        if (!window.showSaveFilePicker) {
+          downloadText("products.json", exportJson());
+          return;
+        }
+        const handle = await window.showSaveFilePicker({
+          suggestedName: "products.json",
+          types: [
+            { description: "JSON", accept: { "application/json": [".json"] } },
+          ],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(exportJson());
+        await writable.close();
+        window.alert("已保存 products.json");
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
+    });
+
+    // reload from assets/data/products.json (discard draft)
+    els.reloadBtn?.addEventListener("click", async () => {
+      const ok = window.confirm(
+        "重新加载会丢弃当前草稿（localStorage）。确认继续？"
+      );
+      if (!ok) return;
+      window.localStorage.removeItem(STORAGE_KEY);
+      els.items.innerHTML = `<div class="news__empty">加载中…</div>`;
+      categories = [];
+      defaults = { brand: "", contact: "", phone: "", address: "" };
+      products = [];
+      selectedId = null;
+      try {
+        await loadInitial();
+      } catch (e) {
+        if (els.app)
+          els.app.innerHTML = `<div class="news__empty">加载失败：${escapeHtml(
+            e?.message || String(e)
+          )}</div>`;
+        return;
+      }
+      ensureCatOptions();
+      if (els.filterCat) els.filterCat.value = "all";
+      filterCat = "all";
+      renderList();
+      renderEditor();
+    });
+
+    // import
+    const openFile = () => {
+      if (!els.fileInput) return;
+      els.fileInput.value = "";
+      els.fileInput.click();
+    };
+    els.importBtn?.addEventListener("click", openFile);
+    els.fileInput?.addEventListener("change", async (e) => {
+      const file = e.target?.files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        // 支持两种格式：
+        // 1) 完整对象：{ categories, defaults, products }
+        // 2) 仅 products 数组：[ ... ]
+        if (Array.isArray(parsed)) {
+          products = parsed;
+        } else {
+          categories = normalizeCats(parsed?.categories);
+          defaults = normalizeDefaults(parsed?.defaults);
+          products = parsed?.products;
+        }
+        if (categories.length === 0) {
+          // 若导入缺少 categories，则从当前数据或源数据兜底
+          const data = await fetchJson(dataUrl);
+          categories = normalizeCats(data?.categories);
+          defaults = normalizeDefaults(data?.defaults);
+        }
+        products = normalizeProducts(products);
+        ensureCatOptions();
+        persistDraft();
+        selectedId = null;
+        renderList();
+        renderEditor();
+      } catch (err) {
+        window.alert(`导入失败：${err?.message || String(err)}`);
+      }
+    });
+
+    // upload (OSS)
+    let uploadMode = "images"; // images | cover
+    const openUpload = (mode) => {
+      uploadMode = mode;
+      if (!els.uploadInput) return;
+      // cover 只允许单选：这里用 multiple 控制不了，只能在处理时取第一张
+      els.uploadInput.value = "";
+      els.uploadInput.click();
+    };
+    els.uploadImagesBtn?.addEventListener("click", () => openUpload("images"));
+    els.uploadCoverBtn?.addEventListener("click", () => openUpload("cover"));
+    els.uploadInput?.addEventListener("change", async (e) => {
+      const files = e.target?.files;
+      if (!files || files.length === 0) return;
+      try {
+        if (els.uploadImagesBtn) els.uploadImagesBtn.disabled = true;
+        if (els.uploadCoverBtn) els.uploadCoverBtn.disabled = true;
+
+        const urls = await uploadFilesToLocal(files);
+        if (urls.length === 0) return;
+        if (uploadMode === "cover") {
+          if (els.cover) els.cover.value = urls[0];
+          // 同时把封面也追加到图片列表（便于详情轮播）
+          appendUrlsToTextarea(els.images, [urls[0]]);
+        } else {
+          // 图片列表：第一张若封面为空，则自动填入封面
+          if (els.cover && !String(els.cover.value || "").trim()) {
+            els.cover.value = urls[0];
+          }
+          appendUrlsToTextarea(els.images, urls);
+        }
+      } catch (err) {
+        window.alert(`上传失败：${err?.message || String(err)}`);
+      } finally {
+        if (els.uploadImagesBtn) els.uploadImagesBtn.disabled = false;
+        if (els.uploadCoverBtn) els.uploadCoverBtn.disabled = false;
+      }
+    });
   };
 
   const initOps = async () => {
@@ -995,18 +1731,22 @@
       .filter((c) => c.id && c.label);
 
     const normProducts = productsAll
-      .map((p) => ({
-        id: String(p?.id ?? ""),
-        title: String(p?.title ?? ""),
-        categoryId: String(p?.categoryId ?? ""),
-        cover: String(p?.cover ?? ""),
-        images: Array.isArray(p?.images) ? p.images.map(String) : [],
-        summary: String(p?.summary ?? ""),
-        brand: String(p?.brand ?? defaults.brand ?? ""),
-        contact: String(p?.contact ?? defaults.contact ?? ""),
-        phone: String(p?.phone ?? defaults.phone ?? ""),
-        address: String(p?.address ?? defaults.address ?? ""),
-      }))
+      .map((p) => {
+        const pick = (v) => String(v ?? "").trim();
+        return {
+          id: pick(p?.id),
+          title: pick(p?.title),
+          categoryId: pick(p?.categoryId),
+          cover: pick(p?.cover),
+          images: Array.isArray(p?.images) ? p.images.map(String) : [],
+          summary: String(p?.summary ?? ""),
+          // 兼容“字段存在但为空字符串”的情况：空值自动回退到 defaults
+          brand: pick(p?.brand) || String(defaults.brand ?? ""),
+          contact: pick(p?.contact) || String(defaults.contact ?? ""),
+          phone: pick(p?.phone) || String(defaults.phone ?? ""),
+          address: pick(p?.address) || String(defaults.address ?? ""),
+        };
+      })
       .filter((p) => p.id && p.title && p.categoryId);
 
     const getCatLabel = (id) => normCats.find((c) => c.id === id)?.label || "";
@@ -1102,8 +1842,14 @@
     const app = document.getElementById("productDetailApp");
     const titleEl = document.getElementById("productTitle");
     const crumbEl = document.getElementById("productCrumb");
-    const imgEl = document.getElementById("productMainImg");
     const dotsEl = document.getElementById("productDots");
+    const galleryEl = document.getElementById("productGallery");
+    const lb = document.getElementById("productLightbox");
+    const lbImg = document.getElementById("productLightboxImg");
+    const lbMask = document.getElementById("productLightboxMask");
+    const lbClose = document.getElementById("productLightboxClose");
+    const lbPrev = document.getElementById("productLightboxPrev");
+    const lbNext = document.getElementById("productLightboxNext");
     const brandEl = document.getElementById("productBrand");
     const contactEl = document.getElementById("productContact");
     const phoneEl = document.getElementById("productPhone");
@@ -1113,7 +1859,7 @@
     const descEl = document.getElementById("productDesc");
     const shareEl = document.getElementById("productShare");
 
-    if (!app || !titleEl || !imgEl || !dotsEl) return;
+    if (!app || !titleEl || !dotsEl || !galleryEl) return;
     if (!item) {
       app.innerHTML = `<div class="news__empty">未找到该产品，请从产品中心进入。</div>`;
       return;
@@ -1154,27 +1900,131 @@
     let active = 0;
     const setActive = (i) => {
       active = Math.max(0, Math.min(images.length - 1, i));
-      imgEl.src = images[active];
       const dots = Array.from(dotsEl.querySelectorAll(".product-dot"));
       dots.forEach((d, idx) => d.classList.toggle("is-active", idx === active));
     };
 
+    // 展示所有图片：纵向画廊
+    galleryEl.innerHTML = images
+      .map((src, i) =>
+        `
+          <div class="product-media__frame" data-idx="${i}">
+            <img class="product-media__img" src="${escapeHtml(
+              src
+            )}" alt="" loading="${i === 0 ? "eager" : "lazy"}" />
+          </div>
+        `.trim()
+      )
+      .join("");
+
+    // 小圆点导航
     dotsEl.innerHTML = images
       .map(
         (_, i) =>
           `<button class="product-dot ${
             i === 0 ? "is-active" : ""
-          }" type="button" aria-label="切换图片 ${i + 1}"></button>`
+          }" type="button" aria-label="查看第 ${i + 1} 张"></button>`
       )
       .join("");
+
+    const frames = () =>
+      Array.from(galleryEl.querySelectorAll(".product-media__frame"));
+
     dotsEl.addEventListener("click", (e) => {
       const btn = e.target?.closest?.(".product-dot");
       if (!btn) return;
       const idx = Array.from(dotsEl.querySelectorAll(".product-dot")).indexOf(
         btn
       );
-      if (idx >= 0) setActive(idx);
+      const target = frames()[idx];
+      if (idx >= 0 && target) {
+        setActive(idx);
+        try {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch {
+          target.scrollIntoView();
+        }
+      }
     });
+
+    const setLightboxActive = (i) => {
+      const next = Math.max(0, Math.min(images.length - 1, i));
+      if (lbImg) lbImg.src = images[next];
+      if (lbPrev) lbPrev.classList.toggle("is-disabled", next <= 0);
+      if (lbNext)
+        lbNext.classList.toggle("is-disabled", next >= images.length - 1);
+      // 同步主图/缩略图 active
+      setActive(next);
+    };
+
+    const closeLightbox = () => {
+      if (!lb) return;
+      lb.hidden = true;
+      document.documentElement.classList.remove("is-lightbox-open");
+    };
+
+    const openLightbox = (i = active) => {
+      if (!lb || !lbImg) return;
+      lb.hidden = false;
+      document.documentElement.classList.add("is-lightbox-open");
+      setLightboxActive(i);
+    };
+
+    // 点击画廊任意图片打开预览
+    galleryEl.addEventListener("click", (e) => {
+      const img = e.target?.closest?.(".product-media__img");
+      if (!img) return;
+      const frame = img.closest?.(".product-media__frame");
+      const idx = Number(frame?.getAttribute?.("data-idx"));
+      if (Number.isFinite(idx)) openLightbox(idx);
+      else openLightbox(active);
+    });
+
+    // 预览层控制
+    lbMask?.addEventListener("click", closeLightbox);
+    lbClose?.addEventListener("click", closeLightbox);
+    lbPrev?.addEventListener("click", () => setLightboxActive(active - 1));
+    lbNext?.addEventListener("click", () => setLightboxActive(active + 1));
+
+    // 键盘左右切换 / ESC 关闭
+    window.addEventListener("keydown", (e) => {
+      if (!lb || lb.hidden) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox();
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setLightboxActive(active - 1);
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setLightboxActive(active + 1);
+      }
+    });
+
+    // 滚动高亮：哪个图片在视口里就高亮哪个 dot
+    try {
+      if ("IntersectionObserver" in window) {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            let best = null;
+            for (const ent of entries) {
+              if (!ent.isIntersecting) continue;
+              if (!best || ent.intersectionRatio > best.intersectionRatio)
+                best = ent;
+            }
+            if (!best) return;
+            const idx = Number(best.target?.getAttribute?.("data-idx"));
+            if (Number.isFinite(idx)) setActive(idx);
+          },
+          { threshold: [0.25, 0.5, 0.75] }
+        );
+        frames().forEach((el) => obs.observe(el));
+      }
+    } catch {
+      // ignore
+    }
 
     setActive(0);
   };
@@ -1208,6 +2058,16 @@
 
   // 初始化运维页面（文章管理）
   initOps().catch((e) => {
+    // eslint-disable-next-line no-console
+    console.error(e);
+  });
+
+  // 初始化运维 Tab / 产品运维
+  initOpsTabs().catch((e) => {
+    // eslint-disable-next-line no-console
+    console.error(e);
+  });
+  initOpsProducts().catch((e) => {
     // eslint-disable-next-line no-console
     console.error(e);
   });
