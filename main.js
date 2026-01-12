@@ -168,11 +168,15 @@
     if (!isNarrow && !isPreview) return;
 
     toggle.style.display = "inline-flex";
+    toggle.style.flexDirection = "column";
+    toggle.style.alignItems = "center";
+    toggle.style.justifyContent = "center";
     toggle.style.color = "#fff";
     toggle.style.zIndex = "95";
     const bars = toggle.querySelectorAll(".nav-toggle__bar");
     bars.forEach((b) => {
       b.style.background = "#fff";
+      b.style.width = "22px";
     });
   };
 

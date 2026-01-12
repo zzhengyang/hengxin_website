@@ -121,11 +121,17 @@ html.is-mobile-portrait-preview .sub-hero{
   position: relative;
   z-index: 95; /* 确保在 logo 之上可点击/可见 */
   flex: 0 0 auto;
+  /* 关键：按钮在移动端是 inline-flex，必须纵向排布三条线，否则 span 无内容会宽度=0 */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
 }
 .nav-toggle__bar{
   display: block;
+  width: 22px;
   height: 3px;
-  margin: 6px 0;
+  margin: 0;
   background: #fff; /* 强制白色线条（避免 currentColor 被覆盖） */
   border-radius: 999px;
   box-shadow: none;
