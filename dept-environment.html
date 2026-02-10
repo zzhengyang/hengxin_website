@@ -4,7 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>环保事业部</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <!-- 加版本参数：避免静态站点/浏览器缓存导致样式不更新 -->
+    <link rel="stylesheet" href="./styles.css?v=20260127-1" />
+    <!-- 兜底：强制管链机图片区完整展示（不裁剪），避免被其它样式覆盖 -->
+    <style>
+      .env-gallery .env-masonry {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+      }
+      .env-gallery .env-masonry__item {
+        margin: 0 !important;
+        aspect-ratio: 4 / 3 !important;
+        padding: 8px !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(15, 23, 42, 0.1) !important;
+        background: #fff !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .env-gallery .env-masonry__img {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        display: block !important;
+      }
+      @media (max-width: 960px) {
+        .env-gallery .env-masonry {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+      }
+      @media (max-width: 640px) {
+        .env-gallery .env-masonry {
+          grid-template-columns: 1fr !important;
+        }
+        .env-gallery .env-masonry__item {
+          aspect-ratio: 16 / 10 !important;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="page">
@@ -90,12 +131,18 @@
             <div class="section-center__divider" aria-hidden="true"></div>
 
             <div class="env-masonry" aria-label="图片拼贴">
-              <img class="env-masonry__img env-masonry__a" src="./assets/environment/feat-2.png.webp" alt="" />
-              <img class="env-masonry__img env-masonry__b" src="./assets/environment/feat-3.png.webp" alt="" />
-              <img class="env-masonry__img env-masonry__c" src="./assets/environment/feat-4.png.webp" alt="" />
-              <img class="env-masonry__img env-masonry__d" src="./assets/environment/feat-5.png.webp" alt="" />
-              <img class="env-masonry__img env-masonry__e" src="./assets/environment/feat-1.png.webp" alt="" />
-              <img class="env-masonry__img env-masonry__f" src="./assets/environment/feat-6.png.webp" alt="" />
+              <figure class="env-masonry__item">
+                <img class="env-masonry__img" src="./assets/environment/chain-1.jpg" alt="管链机图片 1" />
+              </figure>
+              <figure class="env-masonry__item">
+                <img class="env-masonry__img" src="./assets/environment/chain-2.jpg" alt="管链机图片 2" />
+              </figure>
+              <figure class="env-masonry__item">
+                <img class="env-masonry__img" src="./assets/environment/chain-3.jpg" alt="管链机图片 3" />
+              </figure>
+              <figure class="env-masonry__item">
+                <img class="env-masonry__img" src="./assets/environment/chain-4.jpg" alt="管链机图片 4" />
+              </figure>
             </div>
           </div>
         </section>

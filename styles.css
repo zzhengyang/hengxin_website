@@ -1529,35 +1529,42 @@ html.is-mobile-portrait-preview .mnav__link{
 .env-masonry{
   margin-top: 14px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 180px;
+  /* 桌面端：更紧凑，避免图片过大 */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
-.env-masonry__img{
+.env-masonry__item{
+  margin: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  border-radius: 6px;
+  /* 降低高度：图片完整展示（contain）同时不显得“太大” */
+  aspect-ratio: 4 / 3;
+  padding: 8px;
+  border-radius: 8px;
   border: 1px solid rgba(15,23,42,.10);
   background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.env-masonry__a{ grid-column: 1; grid-row: 1; }
-.env-masonry__b{ grid-column: 2; grid-row: 1 / 3; }
-.env-masonry__c{ grid-column: 3; grid-row: 1; }
-.env-masonry__d{ grid-column: 1; grid-row: 2 / 4; }
-.env-masonry__e{ grid-column: 3; grid-row: 2 / 4; }
-.env-masonry__f{ grid-column: 2; grid-row: 3; }
+.env-masonry__img{
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* 关键：完整展示，不裁切 */
+  display: block;
+}
 
 @media (max-width: 960px){
   .env-icon-grid{ grid-template-columns: repeat(3, 1fr); }
   .env-principle__mix{ grid-template-columns: 1fr; }
-  .env-masonry{ grid-template-columns: 1fr; grid-auto-rows: 200px; }
-  .env-masonry__a,
-  .env-masonry__b,
-  .env-masonry__c,
-  .env-masonry__d,
-  .env-masonry__e,
-  .env-masonry__f{ grid-column: auto; grid-row: auto; }
+  /* 中屏：2 列；手机：1 列 */
+  .env-masonry{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px){
+  .env-masonry{ grid-template-columns: 1fr; }
+  .env-masonry__item{ aspect-ratio: 16 / 10; }
 }
 
 /* ----------------------------
